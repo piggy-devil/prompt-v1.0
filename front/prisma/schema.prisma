@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  SUPER
+  ADMIN
+}
+
+enum MessageRole {
+  HUMAN
+  AI
+  SYSTEM // optional if needed for prompt system
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title   String
+  content String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("posts")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime
+  updatedAt DateTime
+
+  name          String
+  email         String  @unique
+  emailVerified Boolean
+  image         String?
+
+  role       UserRole  @default(USER)
+  banned     Boolean?
+  banReason  String?
+  banExpires DateTime?
+
+  employeeId String?
+
+  sessions     Session[]
+  accounts     Account[]
+  posts        Post[]
+  chatSessions ChatSession[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  createdAt DateTime
+  updatedAt DateTime
+
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+
+  impersonatedBy String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Account {
+  id        String   @id @default(uuid())
+  createdAt DateTime
+  updatedAt DateTime
+
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("accounts")
+}
+
+model Verification {
+  id        String    @id @default(uuid())
+  createdAt DateTime?
+  updatedAt DateTime?
+
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  @@map("verifications")
+}
+
+model ChatSession {
+  id        String   @id @default(uuid())
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages ChatMessage[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("chatsessions")
+}
+
+model ChatMessage {
+  id        String      @id @default(uuid())
+  role      MessageRole
+  content   String
+  createdAt DateTime    @default(now())
+
+  chatSession   ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
+  chatSessionId String
+
+  @@map("chatmessages")
+}

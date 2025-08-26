@@ -1,0 +1,119 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-prompt
+    restart: unless-stopped
+    ports:
+      - "6333:6333" # REST API
+      - "6334:6334" # gRPC
+    networks:
+      - prompt-network
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:6333/readyz"]
+      interval: 5s
+      timeout: 5s
+      retries: 60 # รอได้สูงสุด 5 นาที
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-prompt
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    networks:
+      - prompt-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    command: postgres -c listen_addresses='*'
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build: ./front
+    container_name: frontend_app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    # environment:
+    #   NEXT_PUBLIC_BACKEND_API_URL: http://backend:8000
+    env_file:
+      - .env
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000"]
+    #   interval: 5s
+    #   timeout: 2s
+    #   retries: 20
+    networks:
+      - prompt-network
+
+  backend:
+    build: ./back
+    container_name: backend_api
+    restart: unless-stopped
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      QDRANT_HOST: http://qdrant:6333
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back:/app
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
+    #   qdrant:
+    #     condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD", "wget", "--spider", "-q", "http://localhost:8000"]
+    #   interval: 5s
+    #   timeout: 2s
+    #   retries: 20
+    networks:
+      - prompt-network
+
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  ollama:
+    build: ollama
+    ports:
+      - 11434:11434
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - prompt-network
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    entrypoint: ["/usr/bin/bash", "/pull-llama3.2.sh"]
+
+networks:
+  prompt-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  qdrant_data:
+  ollama_data:
