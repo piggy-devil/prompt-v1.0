@@ -126,6 +126,10 @@ services:
 networks:
   prompt-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.20.9.0/24
+          gateway: 10.20.9.1
 
 volumes:
   postgres_data:
