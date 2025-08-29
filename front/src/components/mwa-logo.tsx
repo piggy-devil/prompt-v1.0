@@ -11,11 +11,11 @@ const Logo = ({ children }: { children: React.ReactNode }) => {
     >
       <Link href="/" className="flex items-center gap-2">
         <Image
-          src="/logo-mwa.png"
-          width={300}
-          height={300}
+          src="/brand/mwa-logo.png"
+          width={100}
+          height={100}
           alt="logo of mwa"
-          className="w-8 h-8"
+          className="size-8"
         />
         <h1 className="text-xl font-bold hidden md:block">{children}</h1>
       </Link>

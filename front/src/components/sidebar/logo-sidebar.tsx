@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import { BRAND_BLUE } from "@/lib/utils";
 import { SidebarMenuButton } from "../ui/sidebar";
 
 export const LogoSidebar = () => {
@@ -12,15 +13,21 @@ export const LogoSidebar = () => {
       >
         <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
           <Image
-            src="/logo-mwa.png"
-            width={200}
-            height={200}
+            src="/brand/mwa-logo.png"
+            width={100}
+            height={100}
             alt="logo of mwa"
             className="size-8"
           />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">
-          <span className="truncate font-medium">Prompt พร้อม</span>
+          <span
+            className="text-sm font-medium tracking-wide"
+            style={{ color: BRAND_BLUE }}
+          >
+            MWA Chatbot Platform
+          </span>
+          <span className="text-xs text-muted-foreground">การประปานครหลวง</span>
         </div>
       </SidebarMenuButton>
     </Link>

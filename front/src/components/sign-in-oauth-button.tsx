@@ -20,7 +20,7 @@ export const SignInOauthButton = ({
 
     await signIn.social({
       provider,
-      callbackURL: "/profile",
+      callbackURL: "/prompt-chat",
       errorCallbackURL: "/auth/login/error",
     });
 

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   icons: [
     {
-      url: "/logo-mwa.svg",
-      href: "/logo-mwa.svg",
+      url: "/brand/logo-mwa.svg",
+      href: "/brand/logo-mwa.svg",
     },
   ],
 };

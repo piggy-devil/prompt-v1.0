@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { User, Settings, LogOut, Database } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BRAND_BLUE } from "@/lib/utils";
 
 export function UserButton() {
   const router = useRouter();
@@ -37,14 +38,14 @@ export function UserButton() {
           {user.image ? (
             <AvatarImage src={user.image} alt={user.name} />
           ) : (
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback
+              className="border-[#0B5AA2]/50 border-[1px]"
+              style={{ color: BRAND_BLUE }}
+            >
+              {initials}
+            </AvatarFallback>
           )}
         </Avatar>
-        {/* <button className="flex items-center gap-2 p-2 rounded-full hover:bg-secondary transition-colors outline-none">
-          <span className="text-sm font-medium hidden md:inline-block">
-            {user.name}
-          </span>
-        </button> */}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel className="font-normal">

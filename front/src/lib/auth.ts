@@ -19,6 +19,18 @@ const options = {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+
+      // เพื่อให้ได้ refresh_token
+      accessType: "offline",
+      // prompt: "select_account+consent",
+      prompt: "consent",
+
+      scope: [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/drive.file",
+      ],
     },
   },
   emailVerification: {
@@ -107,7 +119,8 @@ const options = {
     expiresIn: 30 * 24 * 60 * 60,
     cookieCache: {
       enabled: true,
-      maxAge: 5 * 60,
+      // maxAge: 5 * 60 * 60,
+      maxAge: 30 * 24 * 60 * 60,
     },
   },
   advanced: {

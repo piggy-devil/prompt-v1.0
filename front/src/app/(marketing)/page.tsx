@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Toaster } from "sonner";
+import { BRAND_BLUE } from "@/lib/utils";
 import Logo from "@/components/mwa-logo";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -20,6 +21,7 @@ import { Authorized } from "@/components/auth/authorized";
 import { UserButton } from "@/components/auth/user-button";
 import { Unauthorized } from "@/components/auth/unauthorized";
 import { GetStartedButton } from "@/components/get-started-button";
+import Image from "next/image";
 
 const features = [
   {
@@ -59,11 +61,31 @@ const features = [
 export default function MarketingPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="border-b">
-        <div className="container mx-auto py-4 flex justify-between items-center">
+      <header className="sticky top-0 z-10 border-b bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/50">
+        {/* <div className="container mx-auto py-4 flex justify-between items-center h-14">
           <div className="flex items-center">
-            <Logo>Prompt พร้อม</Logo>
+            <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"> */}
+        <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4">
+          <Image
+            src="/brand/mwa-logo.png"
+            width={100}
+            height={100}
+            alt="logo of mwa"
+            className="size-8"
+          />
+          <div className="grid flex-1 text-left text-sm leading-tight ml-2">
+            <span
+              className="text-sm font-medium tracking-wide"
+              style={{ color: BRAND_BLUE }}
+            >
+              MWA Chatbot Platform
+            </span>
+            <span className="text-xs text-muted-foreground">
+              การประปานครหลวง
+            </span>
           </div>
+          {/* </div> */}
+          {/* </div> */}
           <div className="flex items-center gap-2">
             <Authorized>
               <Button variant="ghost" size="sm" asChild>
@@ -85,7 +107,7 @@ export default function MarketingPage() {
         </div>
       </header>
 
-      <main className="flex-grow">
+      <main className="flex-grow mx-auto max-w-7xl">
         <section className="bg-gradient-to-b from-slate-50 to-white py-20 dark:from-slate-950 dark:to-slate-900">
           <div className="container mx-auto px-4 text-center">
             {/* <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -269,12 +291,31 @@ export default function MarketingPage() {
       </main>
 
       <footer className="border-t py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Logo>MWA Chatbot Platform</Logo>
-            </div>
-            {/* <div>
+        {/* <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4"> */}
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4">
+          {/* <div className="flex items-center gap-2">
+            <Logo>MWA Chatbot Platform</Logo>
+          </div> */}
+          <Image
+            src="/brand/mwa-logo.png"
+            width={100}
+            height={100}
+            alt="logo of mwa"
+            className="size-8"
+          />
+          <div className="grid flex-1 text-left text-sm leading-tight ml-2">
+            <span
+              className="text-sm font-medium tracking-wide"
+              style={{ color: BRAND_BLUE }}
+            >
+              MWA Chatbot Platform
+            </span>
+            <span className="text-xs text-muted-foreground">
+              การประปานครหลวง
+            </span>
+          </div>
+          {/* <div>
               <nav className="flex gap-4 items-center text-sm text-muted-foreground">
                 <Link
                   href="/rag/manage"
@@ -302,7 +343,7 @@ export default function MarketingPage() {
                 </Link>
               </nav>
             </div> */}
-          </div>
+          {/* </div> */}
         </div>
       </footer>
 

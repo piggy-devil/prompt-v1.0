@@ -22,3 +22,5 @@ export const VALID_DOMAINS = () => {
 
   return domains;
 };
+
+export const BRAND_BLUE = "#0B5AA2";
